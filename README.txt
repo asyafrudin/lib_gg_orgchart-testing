@@ -15,3 +15,8 @@ http://librerias.logicas.org/lib_gg_orgchart.
 Improvements, suggestions and bugs reports are welcome. Please contact the author at:
 http://desarrolladores.logicos.org/gorka.
 
+=====
+/*
+ * Updates by Amir Syafrudin
+ */
+[2013-07-26] Added a much simpler usage example of the library.
