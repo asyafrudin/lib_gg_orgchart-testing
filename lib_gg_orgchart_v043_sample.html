@@ -34,7 +34,7 @@
 		// change this variable to show any of these
 		// add your own at the end of this section and change this line
 		//
-		var oc_sample_data_to_use = 2;
+		var oc_sample_data_to_use = 4;
 
 
 
@@ -124,8 +124,8 @@
 								children : [
 								    { id : '1211', title : '1211', type : 'staffleft' },
 									{ id : '1212', title : '1212', type : 'stafftop'  },
-								    { id : '1213', title : '1213', type : 'staffleft',
-									//	children : [
+								    { id : '1213', title : '1213', type : 'staffleft'
+									//	, children : [
 									//	    { id : '1213a', title : '1213a', type : 'subordinate' },
 									//		{ id : '1213b', title : '1213b', type : 'subordinate' },
 									//	    { id : '1213c', title : '1213c', type : 'subordinate' }
@@ -211,10 +211,12 @@
 				"id" : "107",
 				"title" : "Familia",
 				"children" : [
-					{ "id" : "140", "title" : "Abuela", "type" : "staff"      , "image" : "morsa.jpg" },
-					{ "id" : "139", "title" : "Abuelo", "type" : "staff"      , "image" : "leon.jpg" },
+					{ "id" : "140", "title" : "Abuela", "type" : "staff"      ,
+						"subtitle": 'subtitle', "image" : "morsa.jpg" },
+					{ "id" : "139", "title" : "Abuelo", "type" : "staff"      ,
+						"subtitle": 'subtitle', "image" : "leon.jpg", "image_position" : "below" },   // below is the default
 					{ "id" : "108", "title" : "Padre" , "type" : "subordinate",
-						"image" : "burro.jpg", "image_position" : "below" },   // below is the default
+						"subtitle": 'subtitle', "image" : "burro.jpg", "image_position" : "above" },
 					{ "id" : "109", "title" : "Madre" , "type" : "subordinate",
 						"image" : "raton.jpg", "image_position" : "above" },
 				]
@@ -302,12 +304,13 @@
 		    .node:first-letter { font-weight: bold; }
 	    </style>
 	    <!---->
-		<!-- optional JS templating mechanism for the FIRST FORM of rendering invocation - don't touch this -->
+		<!-- optional JS templating mechanism for the FIRST FORM of rendering invocation -->
 		<!-- TO_DO this needs documentation -->
 	    <!---->
 	    <script id="oc_template" type="text/x-jsrender">
 	        <div class="node">
 	            <div>{{>title}}</div>
+	            <!--div>{{>title}}<br/>{{>subtitle}}</div-->
 	        </div>
 	    </script>
 		<script type="text/javascript">
@@ -349,6 +352,7 @@
 	<!-- container for FIRST FORM of calling the rendering method -->
 	<p>FIRST FORM of calling the rendering method:</p>
 	<!-- invocation was made before, inside the HEAD block -->
+	<!-- see lines around #310 for setting styles for text inside boxes -->
 	<div id="oc_container1"></div>  
 
 

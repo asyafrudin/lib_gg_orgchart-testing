@@ -21,6 +21,8 @@
 * v.0.4.3 beta 1 (2013.05.22, GG): integrated patches from some users, fix rendering issues, and released minor version
 * v.0.4.3 beta 2 (2013.06.12, GG): implemented "invisible" nodes for greater flexibility
 * v.0.4.3 beta 2 (2013.06.12, GG): allowed drawing the text inside boxes above or below images
+* v.0.4.3 beta 3 (2013.08.28, RK): fixed regression: rendering issues in IE 7 and 8
+* v.0.4.3 beta 4 (2013.09.25, GG): fixed issues rendering nodes with both images and subtitles
 *
 * Contributors (in order of appearance):
 * GG :: Gorka G LLONA
@@ -28,6 +30,7 @@
 * MJ :: Milan JAROŠ
 * RB :: Rob BOERMAN
 * JB :: Jean-Paul BEHRNES
+* RK :: Ryad BEN-EL-KEZADRI
 */
 
 
@@ -84,7 +87,7 @@
             subtitle_char_size: [5, 10],       // size (x, y) of a char of the font used for displaying subtitles
             max_text_width: 15,                // max width (in chars) of each line of text ('0' for no limit)
             text_font: 'Courier',              // font family to use (should be monospaced)
-            use_images: false,                 // use images within boxes?
+            use_images: false,                  // use images within boxes?
             images_base_url: './images/',      // base url of the images to be embeeded in boxes, with a trailing slash
             images_size: [160, 160],           // size (x, y) of the images to be embeeded in boxes
             box_click_handler: undefined,      // handler (function) called on click on boxes (set to null if no handler)
@@ -353,9 +356,9 @@
         if (node.children !== undefined) {
             for (i = 0; i < node.children.length; i++) {
                 child = node.children[i];
-                child.parent = node;
                 if (child == null)
                     continue;
+                child.parent = node;
                 if (child.type == 'staff') {
                     child.indexAsStaffChildren = node.maxStaffChildIndex = ++oc_staff_counter;
                     child.position = (oc_staff_position++ % 2 == 0 ? 'left' : 'right');
@@ -720,6 +723,8 @@
         if (node.children !== undefined) {
             for (i = 0; i < node.children.length; i++) {
                 child = node.children[i];
+                if (child == null)
+                    continue;
                 if (child.type != 'staff' || child.position == 'right')
                     continue;
                 if (child.children === undefined)
@@ -923,10 +928,8 @@
             if (typeof (options.box_callback) == "function") {
                 options.box_callback(box);
             }
-
             if (node.id !== undefined)
                 box.oc_id = node.id;
-
             var event_box_color_hover = options.box_color_hover;
             var event_box_color = options.box_color;
             // attach events to rectangle
@@ -955,9 +958,13 @@
                 if (node.subtitle !== undefined) {
                     var subtitle_ypos = y1 - options.inner_padding
                         - node.subtitle_lines * options.subtitle_char_size[1] / 2;
+                    if (options.use_images && node.image !== undefined)
+                        subtitle_ypos -= options.images_size[1] + options.inner_padding;
                     if ((options.use_images && node.image !== undefined) &&
                         (node.image_position !== undefined && node.image_position == "above")) {   // text below image
                         subtitle_ypos += options.images_size[1] + options.inner_padding;
+                        //alert(title_ypos + " -- " + subtitle_ypos);
+                        //subtitle_ypos += options.images_size[1] + 50;
                     }
                     var subtitle = oc_paper.text(xc, subtitle_ypos, node.subtitle);
                     subtitle.attr('font-family', options.text_font);
